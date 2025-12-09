@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Ocean Chat – Frontend
 
-## Getting Started
+A modern Next.js UI for a simple real-time chat using the Ocean Professional theme (blue + amber accents). Includes a resilient WebSocket client with mock fallback so the UI works even without backend configuration.
 
-First, run the development server:
+## Quick Start
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Dev: `npm run dev` then open http://localhost:3000
+- Build: `npm run build`
+- Start: `npm run start`
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+No extra scripts were added; the app works with the current preview system.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Features
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Header with gradient background and connection status badge
+- Scrollable message list with auto-scroll-to-bottom
+- Message input with Enter to send, disabled/“sending…” state
+- Username prompt persisted in localStorage (defaults to "You")
+- WebSocket client using `NEXT_PUBLIC_WS_URL`, with exponential backoff reconnect
+- Mock in-memory transport when WS is not configured or fails (echo)
+- Ocean Professional theme: rounded corners, subtle shadows, modern focus states
 
-## Learn More
+## Environment Variables
 
-To learn more about Next.js, take a look at the following resources:
+- `NEXT_PUBLIC_WS_URL` (optional) – WebSocket endpoint.
+- `NEXT_PUBLIC_API_BASE`, `NEXT_PUBLIC_BACKEND_URL` (optional, for future use).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+If `NEXT_PUBLIC_WS_URL` is not set, the app uses a mock transport that echoes messages to demonstrate real-time behavior.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Code Structure
 
-## Deploy on Vercel
+- `src/app/page.tsx` – Main page wiring state and transport
+- `src/components/ChatHeader.tsx` – Header and status
+- `src/components/MessageList.tsx` – Scrollable list with bubbles
+- `src/components/MessageInput.tsx` – Input form
+- `src/components/UsernamePrompt.tsx` – Inline username setter
+- `src/lib/ws.ts` – WebSocket helper (with mock fallback)
+- `src/lib/time.ts` – Time formatting utilities
+- `src/types/index.ts` – Shared types
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Styling
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Tailwind CSS v4 is configured. The Ocean Professional palette is reflected via classes and CSS variables defined in `src/app/globals.css`.
+
+## Accessibility
+
+- Input and buttons have aria labels
+- Keyboard submit via Enter
+- Focus-visible outlines for keyboard users
